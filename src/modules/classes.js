@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 // ship class
 
 class Ship {
@@ -25,30 +27,68 @@ class GameBoard {
         this.width = width
         this.ship1 = ''
         this.ship2 = ''
+        this.ship3 = ''
+        this.ship4 = ''
+        this.ship5 = ''
+        this.takenFields = []
     }
     
-    //init the ships position
-    setShip1(direction, startField, size) {
-        this.ship1 = [...this.setShip(direction, startField, size)]
+    //create new ships with positions on board
+    setShip1(name, size, direction,  startField) {
+        this.ship1 = [...this.setShip(name, size, direction,  startField)]
     }
     
-    setShip2(direction, startField, size) {
-        this.ship2 = [...this.setShip(direction, startField, size)]
+    setShip2(name, size, direction,  startField) {
+        this.ship2 = [...this.setShip(name, size, direction,  startField)]
+    }
+
+    setShip3(direction, startField, size) {
+        this.ship3 = [...this.setShip(name, size, direction,  startField)]
+    }
+
+    setShip4(name, size, direction,  startField) {
+        this.ship4 = [...this.setShip(name, size, direction,  startField)]
+    }
+
+    setShip5(name, size, direction,  startField) {
+        this.ship5 = [...this.setShip(name, size, direction,  startField)]
     }
 
     //additional methods
-    setShip(direction, startField, size) {
-        const arr = []
+    setShip(name, size, direction,  startField) {
+        const arr = [[new Ship(name, size)], []]   
+
+        //check if ship positioned inside the table dimensions
+        if (startField[0] + size > this.height || startField[1] + size > this.width) {
+            throw Error('board limits reached')
+        }
+
+        //create ship's fields on the board if available
         if (direction === 'horizontal') {
             for(let i = 0; i < size; i++) {
-                arr.push([startField[0], startField[1] + i])
+                let field = [startField[0], startField[1] + i]
+                if (this.checkEmptyField(field)) {
+                    this.takenFields.push(field)
+                    arr[1].push(field)
+                } else throw Error('spot has been taken')
             }
         } else if (direction === 'vertical') {
             for(let i = 0; i < size; i++) {
-                arr.push([startField[0] + i, startField[1]])
+                let field = [startField[0] + i, startField[1]]
+                if (this.checkEmptyField(field)) {
+                    this.takenFields.push(field)
+                    arr[1].push(field)
+                } else throw Error('spot has been taken')
             }
         }
-        return arr
+    }
+
+    checkEmptyField(field) {
+        return !this.takenFields.some((element) => _.isEqual(element, field))
+    }
+
+    recieveAttack() {
+
     }
 }
 

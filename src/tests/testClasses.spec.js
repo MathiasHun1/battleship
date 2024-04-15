@@ -24,21 +24,31 @@ describe('Ship', () => {
 })
 
 describe('GameBoard', () => {
+    const myBoard = new GameBoard('myBoard', 50, 50)
     test('init gameboard properly', () => {
-        const myBoard = new GameBoard('myBoard', 50, 50)
         expect(myBoard.width).toBe(50)
         expect(myBoard.height).toBe(50)
     })
     test('places ship horizontally', () => {
-        const myBoard = new GameBoard('myBoard', 50, 50)
-        const myShip = new Ship('Sanyi hajó', 6)
-        myBoard.setShip1('horizontal', [0, 0], myShip.length)
-        expect(myBoard.ship1).toStrictEqual([[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [0, 5]])
+        myBoard.setShip1('tiny', 2, 'horizontal', [0, 0])
+        expect(myBoard.ship1[1]).toStrictEqual([[0, 0], [0, 1]])
     })
     test('places ship vertically', () => {
-        const myBoard = new GameBoard('myBoard', 50, 50)
-        const myShip = new Ship('Sanyi hajó', 5)
-        myBoard.setShip1('vertical', [13, 22], myShip.length)
-        expect(myBoard.ship1).toStrictEqual([[13, 22], [14, 22], [15, 22], [16, 22], [17, 22]])
+        myBoard.setShip2('bigger', 3, 'vertical', [13, 22])
+        expect(myBoard.ship2[1]).toStrictEqual([[13, 22], [14, 22], [15, 22]])
+    })
+    test('throw error if place ship outside the board', () => {
+        expect(() => { myBoard.setShip('golem', 5, 'vertical', [46, 13]) }).toThrow('board limits reached')
+        expect(() => { myBoard.setShip('very big', 4, 'horizontal', [11, 48]) }).toThrow('board limits reached')
+    })
+    test('checks if a field is available', () => {
+        expect(myBoard.checkEmptyField([0, 5])).toBe(true)
+        myBoard.takenFields.push([12, 12])
+        expect(myBoard.checkEmptyField([12, 12])).toBe(false)
+    })
+    test('not places new ship if the spot has been taken', () => {
+        myBoard.setShip1('bla', 6, 'horizontal', [0, 15])
+        expect(() => { myBoard.setShip('golem', 5, 'horizontal', [0, 13]) }).toThrow('spot has been taken')
+        expect(myBoard.checkEmptyField([0, 14])).toBe('true')
     })
 })
