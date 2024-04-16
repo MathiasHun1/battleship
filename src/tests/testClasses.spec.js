@@ -30,12 +30,34 @@ describe('GameBoard', () => {
         expect(myBoard.width).toBe(50)
         expect(myBoard.height).toBe(50)
     })
-    test('setShipHorizontal works', () => {
+    test('place ship horizontally', () => {
         myBoard.setShipHorizontal('big', 5, [0, 0])
         expect(myBoard.ships[0].name).toBe('big')
         expect(myBoard.checkEmptyField([0, 0])).toBe(false)
         expect(myBoard.checkEmptyField([0, 5])).toBe(true)
-
     })
-    
+    test('place ship vertically', () => {
+        myBoard.setShipVertical('medium', 3, [12, 25])
+        expect(myBoard.ships[1].name).toBe('medium')
+        expect(myBoard.ships[1].ownFields).toEqual([[12, 25], [13, 25], [14, 25]])
+    })
+    test('not places ship if place is taken', () => {
+        expect(myBoard.setShipHorizontal('big', 5, [0, 4])).toBe(false)
+        expect(myBoard.checkEmptyField([0, 5])).toBe(true)
+        expect(myBoard.setShipVertical('big', 5, [13, 25])).toBe(false)
+        expect(myBoard.checkEmptyField([15, 25])).toBe(true
+        )
+    })
+    test('not places ship if board limits are reached', () => {
+        expect(myBoard.setShipHorizontal('big', 5, [0, 46])).toBe(false)
+        expect(myBoard.setShipVertical('big', 5, [48, 25])).toBe(false)
+        expect(myBoard.ships.length).toBe(2)
+    })
+    test('recieves attack properly', () => {
+        expect(myBoard.recieveAttack([0, 1])).toBe(true)
+        expect(myBoard.ships[0].timesHit).toBe(1)
+        expect(myBoard.recieveAttack([0, 1])).toBe(false)
+        expect(myBoard.recieveAttack([0, 5])).toBe(true)
+        expect(myBoard.recieveAttack([0, 5])).toBe(false)
+    })
 })
