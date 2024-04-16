@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import { makeField, containsSameElement} from './helperFunctions'
 
 // ship class
 
@@ -25,72 +26,80 @@ class GameBoard {
         this.name = name
         this.height = height
         this.width = width
-        this.ship1 = ''
-        this.ship2 = ''
-        this.ship3 = ''
-        this.ship4 = ''
-        this.ship5 = ''
-        this.takenFields = []
+        this.ships = []
+        this.missedAttacks = []
+        this.scoredAttacks = []
     }
     
-    //create new ships with positions on board
-    setShip1(name, size, direction,  startField) {
-        this.ship1 = [...this.setShip(name, size, direction,  startField)]
-    }
-    
-    setShip2(name, size, direction,  startField) {
-        this.ship2 = [...this.setShip(name, size, direction,  startField)]
-    }
-
-    setShip3(direction, startField, size) {
-        this.ship3 = [...this.setShip(name, size, direction,  startField)]
-    }
-
-    setShip4(name, size, direction,  startField) {
-        this.ship4 = [...this.setShip(name, size, direction,  startField)]
-    }
-
-    setShip5(name, size, direction,  startField) {
-        this.ship5 = [...this.setShip(name, size, direction,  startField)]
-    }
-
     //additional methods
-    setShip(name, size, direction,  startField) {
-        const arr = [[new Ship(name, size)], []]   
-
+    setShipHorizontal(name, size, startField) {
         //check if ship positioned inside the table dimensions
-        if (startField[0] + size > this.height || startField[1] + size > this.width) {
-            throw Error('board limits reached')
+        if (startField[1] + size > this.width) {
+            return false
+        }
+        //check if the picked position is available, connect it to the ship
+        if (this.checkAllEmpty(startField, size, 'horizontal')) {
+            const ship = new Ship(name, size)
+            ship.ownFields = makeField(startField, size, 'horizontal')
+            this.ships.push(ship)
+        } else {
+            return false
         }
 
-        //create ship's fields on the board if available
-        if (direction === 'horizontal') {
-            for(let i = 0; i < size; i++) {
-                let field = [startField[0], startField[1] + i]
-                if (this.checkEmptyField(field)) {
-                    this.takenFields.push(field)
-                    arr[1].push(field)
-                } else throw Error('spot has been taken')
-            }
-        } else if (direction === 'vertical') {
-            for(let i = 0; i < size; i++) {
-                let field = [startField[0] + i, startField[1]]
-                if (this.checkEmptyField(field)) {
-                    this.takenFields.push(field)
-                    arr[1].push(field)
-                } else throw Error('spot has been taken')
+    }
+
+    setShipVertical(name, size, startField) {
+        if (startField[0] + size > this.height) {
+            return false
+        }
+        if (this.checkAllEmpty(startField, size, 'vertical')) {
+            const ship = new Ship(name, size)
+            ship.ownFields = makeField(startField, size, 'vertical')
+            this.ships.push(ship)
+        } else {
+            return false
+        }
+    }
+
+    checkAllEmpty(field, size, direction) {
+        let arr1 = []
+        let arr2 = []
+        if (this.ships) {
+            this.ships.forEach((ship) => ship.ownFields.forEach((spot) => arr1.push(spot)))
+        }
+        for (let i = 0; i < size; i++) {
+            if (direction === 'horizontal') {
+                arr2.push([field[0], field[1] + i])
+            } else if (direction === 'vertical') {
+                arr2.push([field[0] + i, field[1]])
             }
         }
+        return !containsSameElement(arr1, arr2)
     }
 
     checkEmptyField(field) {
-        return !this.takenFields.some((element) => _.isEqual(element, field))
+        return !this.ships.some((ship) => ship.ownFields.some((spot) => _.isEqual(spot, field)))
     }
 
-    recieveAttack() {
-
+    recieveAttack(field) {
+        if (this.scoredAttacks.some((spot) => _.isEqual(spot, field)) || 
+        this.missedAttacks.some((spot) => _.isEqual(spot, field))) {
+            return false
+        }
+        let hittedShip = this.ships.find((ship) => ship.ownFields.some((spot) => _.isEqual(spot, field)))
+        if (hittedShip) {
+            hittedShip.hit(field)
+            this.scoredAttacks.push(field)
+            return true
+        } else {
+            this.missedAttacks.push(field)
+            return true
+        }
     }
 }
 
 
 export { Ship, GameBoard }
+
+
+// (this.scoredAttacks.some((spot) => _.isEqual(spot, field)) 
