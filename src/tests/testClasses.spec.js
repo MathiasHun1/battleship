@@ -1,4 +1,4 @@
-import { Ship, GameBoard } from "../modules/classes";
+import { Ship, GameBoard } from "../modules/classes/gameBoard";
 import {containsSameElement, checkAllEmpty, makeField} from "../modules/helperFunctions";
 
 describe('Ship', () => {

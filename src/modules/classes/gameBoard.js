@@ -96,6 +96,10 @@ class GameBoard {
             return true
         }
     }
+
+    isAllSunk() {
+        return this.ships.every((ship) => ship.isSunk() === true) ? true : false
+    }
 }
 
 
