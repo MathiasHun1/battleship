@@ -1,13 +1,13 @@
 import _ from 'lodash'
 import { makeField, containsSameElement} from './helperFunctions'
 
-// ship class
 
 class Ship {
     constructor (name, length) {
         this.name = name.trim()
         this.length = parseInt(length)
         this.timesHit = 0
+        this.fieldId = null
     }
 
     hit() {
@@ -19,91 +19,38 @@ class Ship {
     }
 }
 
-// gameboard class
-
-class GameBoard {
-    constructor(name, height, width) {
-        this.name = name
-        this.height = height
-        this.width = width
-        this.ships = []
-        this.missedAttacks = []
-        this.scoredAttacks = []
+class Field {
+    constructor(id, coordinateX, coordinateY) {
+        this.id = id
+        this.coordinateX = coordinateX
+        this.coordinateY = coordinateY
+        this.isAttacked = false
     }
-    
-    //additional methods
-    setShipHorizontal(name, size, startField) {
-        //check if ship positioned inside the table dimensions
-        if (startField[1] + size > this.width) {
-            return false
-        }
-        //check if the picked position is available, connect it to the ship
-        if (this.checkAllEmpty(startField, size, 'horizontal')) {
-            const ship = new Ship(name, size)
-            ship.ownFields = makeField(startField, size, 'horizontal')
-            this.ships.push(ship)
-        } else {
-            return false
-        }
-
-    }
-
-    setShipVertical(name, size, startField) {
-        if (startField[0] + size > this.height) {
-            return false
-        }
-        if (this.checkAllEmpty(startField, size, 'vertical')) {
-            const ship = new Ship(name, size)
-            ship.ownFields = makeField(startField, size, 'vertical')
-            this.ships.push(ship)
-        } else {
-            return false
-        }
-    }
-
-    checkAllEmpty(field, size, direction) {
-        let arr1 = []
-        let arr2 = []
-        if (this.ships) {
-            this.ships.forEach((ship) => ship.ownFields.forEach((spot) => arr1.push(spot)))
-        }
-        for (let i = 0; i < size; i++) {
-            if (direction === 'horizontal') {
-                arr2.push([field[0], field[1] + i])
-            } else if (direction === 'vertical') {
-                arr2.push([field[0] + i, field[1]])
-            }
-        }
-        return !containsSameElement(arr1, arr2)
-    }
-
-    checkEmptyField(field) {
-        return !this.ships.some((ship) => ship.ownFields.some((spot) => _.isEqual(spot, field)))
-    }
-
-    recieveAttack(field) {
-        if (this.scoredAttacks.some((spot) => _.isEqual(spot, field)) || 
-        this.missedAttacks.some((spot) => _.isEqual(spot, field))) {
-            return false
-        }
-        let hittedShip = this.ships.find((ship) => ship.ownFields.some((spot) => _.isEqual(spot, field)))
-        if (hittedShip) {
-            hittedShip.hit(field)
-            this.scoredAttacks.push(field)
-            return true
-        } else {
-            this.missedAttacks.push(field)
-            return true
-        }
-    }
-
-    isAllSunk() {
-        return this.ships.every((ship) => ship.isSunk() === true) ? true : false
+    setAttack() {
+        this.isAttacked = true
     }
 }
 
+class GameBoard {
+    constructor() {
+        this.ships = []
+        this.fields = []
+        this.missedAttacks = []
+        this.scoredAttacks = []
+    }
 
-export { Ship, GameBoard }
+    setFields() {
+        let id = 0
+        for (let i = 0; i < 10; i++) {
+            for (let j = 0; j < 10; j++) {
+                this.fields.push(new Field(id, i, j))
+                id++
+            }
+        }
+    }
+   
+}
 
 
-// (this.scoredAttacks.some((spot) => _.isEqual(spot, field)) 
+export { Ship, Field,  GameBoard }
+
