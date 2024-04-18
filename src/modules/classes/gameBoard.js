@@ -7,7 +7,7 @@ class Ship {
         this.name = name.trim()
         this.length = parseInt(length)
         this.timesHit = 0
-        this.fieldId = null
+        this.fieldIds = []
     }
 
     hit() {
@@ -43,12 +43,47 @@ class GameBoard {
         let id = 0
         for (let i = 0; i < 10; i++) {
             for (let j = 0; j < 10; j++) {
-                this.fields.push(new Field(id, i, j))
+                this.fields.push(new Field(id, j, i))
                 id++
             }
         }
     }
-   
+
+    addShipHorizontal(name, length, startPosition) {
+        const ship = new Ship(name, length)
+        const field = this.fields[startPosition]
+
+        for (let i = 0; i < length; i++) {
+            ship.fieldIds.push(startPosition + i)
+        }
+
+        if (field.coordinateX + length-1 > 9) {
+            return false
+        } else if ( this.ships.some((ownShip) => ownShip.fieldIds.some((id) => ship.fieldIds.includes(id)))) {
+            return false
+        } else {
+            this.ships.push(ship)
+            return true
+        }
+    }
+
+    addShipVertical(name, length, startPosition) {
+        const ship = new Ship(name, length)
+        const field = this.fields[startPosition]
+
+        for (let i = 0; i < length*10; i+=10) {
+            ship.fieldIds.push(startPosition + i)
+        }
+
+        if (field.coordinateY + length-1 > 9) {
+            return false
+        } else if ( this.ships.some((ownShip) => ownShip.fieldIds.some((id) => ship.fieldIds.includes(id)))) {
+            return false
+        } else {
+            this.ships.push(ship)
+            return true
+        }
+    }
 }
 
 
