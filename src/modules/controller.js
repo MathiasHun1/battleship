@@ -2,20 +2,25 @@ import { GameBoard, Ship } from "./classes/gameBoard";
 import { Player } from "./classes/player";
 
 export class Controller {
-    static player1 = new Player('Player1')
-    static player2 = new Player('Computer')
 
-    static initShips() {
+    static initGame() {
+        const player1 = new Player('Player1')
+        const player2 = new Player('Computer')
+        
+        player1.gameBoard.setFields()
+        player2.gameBoard.setFields()
+        console.log(player1, player2)
+
         //generate ships manually 
-        this.player1.gameBoard.setShipHorizontal('tiny', 2, [0, 5])
-        this.player1.gameBoard.setShipHorizontal('small', 3, [4, 6])
-        this.player1.gameBoard.setShipVertical('medium', 4, [1, 2])
-        this.player1.gameBoard.setShipVertical('big', 5, [5, 2])
-
-        this.player2.gameBoard.setShipHorizontal('tiny', 2, [0, 5])
-        this.player2.gameBoard.setShipHorizontal('small', 3, [4, 6])
-        this.player2.gameBoard.setShipVertical('medium', 4, [1, 2])
-        this.player2.gameBoard.setShipVertical('big', 5, [5, 2])
-        console.log(this.player1)
+        player1.gameBoard.addShipHorizontal('tiny', 2, 5)
+        player1.gameBoard.addShipHorizontal('small', 3, 46)
+        player1.gameBoard.addShipHorizontal('medium', 4, 12)
+        player1.gameBoard.addShipHorizontal('big', 5, 52)
+    
+        player2.gameBoard.addShipHorizontal('tiny', 2, 5)
+        player2.gameBoard.addShipHorizontal('small', 3, 46)
+        player2.gameBoard.addShipHorizontal('medium', 4, 12)
+        player2.gameBoard.addShipHorizontal('big', 5, 52)
     }
+
 }
