@@ -1,4 +1,3 @@
-import { GameBoard, Ship } from "./classes/gameBoard";
 import { AIplayer, Player } from "./classes/player";
 import { UI } from "./DOM/UI";
 
@@ -34,16 +33,27 @@ export class Controller {
 
     static checkWinner(player) {
         if (player.gameBoard.ships.every((ship) => ship.isSunk())) {
-            console.log('all Sunk')
             return true
         }
     }
 
     static playRound(id) {
         if(this.checkWinner(this.player2)) return
+        if(this.checkWinner(this.player2)) return
+
         this.player2.getAttack(id)
-        this.checkWinner(this.player2)
         this.renderView()
+        if (this.checkWinner(this.player2)) {
+            UI.endGame(this.player1)
+            return
+        }
+
+        this.player1.getAttack()
+        this.renderView()
+        if (this.checkWinner(this.player1)) {
+            UI.endGame(this.player2)
+            return
+        }
     }
 
     static switchAcivePlayer() {

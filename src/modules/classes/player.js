@@ -6,8 +6,14 @@ class Player {
         this.gameBoard = new GameBoard()
     }
 
-    getAttack(fieldId) {
-        this.gameBoard.fields[fieldId].setAttack()
+    getAttack() {
+        let freeFields = this.gameBoard.fields.filter((field) => field.isAttacked === false)
+        let randomIndex = Math.floor(Math.random() * freeFields.length)
+        this.gameBoard.fields[randomIndex].setAttack()
+        const foundShip = this.gameBoard.ships.find((ship) => ship.fieldIds.includes(randomIndex))
+        if (foundShip) {
+            foundShip.hit()
+        }
     }
 }
 
@@ -23,6 +29,7 @@ class AIplayer {
         const foundShip = this.gameBoard.ships.find((ship) => ship.fieldIds.includes(id))
         if (foundShip) {
             foundShip.hit()
+
         }
     }
 }

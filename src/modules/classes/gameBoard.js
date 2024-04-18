@@ -38,8 +38,7 @@ class GameBoard {
     constructor() {
         this.ships = []
         this.fields = []
-        this.missedAttacks = []
-        this.scoredAttacks = []
+        this.attackedFields = []
     }
 
     setFields() {

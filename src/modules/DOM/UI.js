@@ -20,15 +20,23 @@ class UI {
 
     static createPlayerFieldView (player, id) {
         const field = document.createElement('div')
+        const hasShip = player.gameBoard.ships.find((ship) => ship.fieldIds.includes(id))
+        const isAttacked = player.gameBoard.fields[id].isAttacked
+
         field.classList.add('field')
         field.setAttribute('id', id)
 
-        if (player.gameBoard.fields[id].isAttacked) {
+        if (isAttacked) {
             field.classList.add('missed')
         }
     
-        if (player.gameBoard.ships.find((ship) => ship.fieldIds.includes(id))) {
+        if (hasShip) {
             field.classList.add('has-ship')
+        }
+
+        if(hasShip && isAttacked) {
+            field.classList.remove('missed')
+            field.classList.add('hit')
         }
 
         return field
@@ -43,7 +51,7 @@ class UI {
             field.classList.add('missed')
         }
 
-        if(player.gameBoard.fields[id].isAttacked && 
+        if (player.gameBoard.fields[id].isAttacked && 
         player.gameBoard.ships.find((ship) => ship.fieldIds.includes(id))) {
             field.classList.remove('missed')
             field.classList.add('hit')
@@ -57,8 +65,8 @@ class UI {
         return field
     }
 
-    static eventListeners() {
-
+    static endGame(player) {
+        alert(`${player.name} wins`)
     }
 }
 
