@@ -6,13 +6,16 @@ class Player {
         this.gameBoard = new GameBoard()
     }
 
-    attack() {
-
-    }
-
-    randomAttack() {
-        
+    getAttack(fieldId) {
+        this.gameBoard.fields[fieldId].setAttack()
     }
 }
 
-export { Player }
+class AIplayer extends Player {
+
+    getAttack(fieldId) {
+        this.gameBoard.fields[fieldId].setAttack()
+    }
+}
+
+export { Player, AIplayer }

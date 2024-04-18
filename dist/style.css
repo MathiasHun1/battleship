@@ -1,3 +1,7 @@
+:root {
+    --board-color: rgb(201, 198, 198);
+}
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -45,6 +49,7 @@ main {
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
+    background-color: var(--board-color);
 }
 
 .player-name-text {
@@ -67,4 +72,12 @@ main {
     border: 2px solid;
     border-bottom: none;
     margin: 0 auto;
+}
+
+.has-ship {
+    background-color: black;
+}
+
+#computer-gameboard > .field {
+    background-color: var(--board-color);
 }
