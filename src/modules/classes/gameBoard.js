@@ -8,14 +8,17 @@ class Ship {
         this.length = parseInt(length)
         this.timesHit = 0
         this.fieldIds = []
+        this.sunk = false
     }
 
     hit() {
         this.timesHit++
+        this.isSunk()
     }
 
     isSunk() {
-        return (this.timesHit >= this.length)? true : false
+        this.timesHit < this.length ? this.sunk = false : this.sunk = true
+        return this.sunk
     }
 }
 
@@ -84,6 +87,7 @@ class GameBoard {
             return true
         }
     }
+
 }
 
 

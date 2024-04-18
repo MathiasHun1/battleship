@@ -78,6 +78,11 @@ main {
     background-color: black;
 }
 
-#computer-gameboard > .field {
-    background-color: var(--board-color);
+
+.missed {
+    background-color: blue;
+}
+
+.hit {
+    background-color: red;
 }

@@ -13,7 +13,6 @@ export class Controller {
     static initGame() {
         this.player1.gameBoard.setFields()
         this.player2.gameBoard.setFields()
-        // console.log(player1, player2)
 
         //generate ships manually 
         this.player1.gameBoard.addShipHorizontal('tiny', 2, 5)
@@ -25,18 +24,25 @@ export class Controller {
         this.player2.gameBoard.addShipHorizontal('small', 3, 71)
         this.player2.gameBoard.addShipHorizontal('medium', 4, 32)
         this.player2.gameBoard.addShipVertical('big', 5, 48)
-        console.log(this.player1)
     }
 
 
     static renderView() {
-        UI.drawFields(this.player1, this.board1)
-        UI.drawFields(this.player2, this.board2)
+        UI.drawPlayerFields(this.player1, this.board1)
+        UI.drawAIFields(this.player2, this.board2)
+    }
+
+    static checkWinner(player) {
+        if (player.gameBoard.ships.every((ship) => ship.isSunk())) {
+            console.log('all Sunk')
+            return true
+        }
     }
 
     static playRound(id) {
+        if(this.checkWinner(this.player2)) return
         this.player2.getAttack(id)
-        console.log(this.player1, this.player2)
+        this.checkWinner(this.player2)
         this.renderView()
     }
 
