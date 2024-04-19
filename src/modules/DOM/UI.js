@@ -1,3 +1,4 @@
+import { has } from "lodash"
 import { Player, AIplayer } from "../classes/player"
 import { Controller } from "../controller"
 
@@ -26,17 +27,12 @@ class UI {
         field.classList.add('field')
         field.setAttribute('id', id)
 
-        if (isAttacked) {
-            field.classList.add('missed')
-        }
-    
-        if (hasShip) {
-            field.classList.add('has-ship')
-        }
-
-        if(hasShip && isAttacked) {
-            field.classList.remove('missed')
+        if (isAttacked && hasShip) {
             field.classList.add('hit')
+        } else if (!isAttacked && hasShip) {
+            field.classList.add('has-ship')
+        } else if (isAttacked) {
+            field.classList.add('missed')
         }
 
         return field

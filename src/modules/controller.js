@@ -19,10 +19,10 @@ export class Controller {
         this.player1.gameBoard.addShipHorizontal('medium', 4, 32)
         this.player1.gameBoard.addShipVertical('big', 5, 48)
     
-        this.player2.gameBoard.addShipHorizontal('tiny', 2, 5)
-        this.player2.gameBoard.addShipHorizontal('small', 3, 71)
-        this.player2.gameBoard.addShipHorizontal('medium', 4, 32)
-        this.player2.gameBoard.addShipVertical('big', 5, 48)
+        this.player2.gameBoard.addShipRandomly('tiny', 2, 5)
+        this.player2.gameBoard.addShipRandomly('small', 3, 71)
+        this.player2.gameBoard.addShipRandomly('medium', 4, 32)
+        this.player2.gameBoard.addShipRandomly('big', 5, 48)
     }
 
 
@@ -38,7 +38,7 @@ export class Controller {
     }
 
     static playRound(id) {
-        if(this.checkWinner(this.player2)) return
+        if(this.checkWinner(this.player1)) return
         if(this.checkWinner(this.player2)) return
 
         this.player2.getAttack(id)

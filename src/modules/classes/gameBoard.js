@@ -87,6 +87,26 @@ class GameBoard {
         }
     }
 
+    addShipRandomly(name, length) {
+        const ship = new Ship(name, length)
+        let randomDirection = Math.random()
+        let randomPosition;
+        let success = false
+
+        if (randomDirection < 0.5) {
+            do {
+                randomPosition = Math.floor(Math.random() * 100 )
+                success = this.addShipHorizontal(name, length, randomPosition)
+            } while (!success)
+        } else {
+            do {
+                randomPosition = Math.floor(Math.random() * 100 )
+                success = this.addShipVertical(name, length, randomPosition)
+            } while (!success)
+        }
+
+    }
+
 }
 
 
