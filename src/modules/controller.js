@@ -9,20 +9,26 @@ export class Controller {
     static board1 = document.querySelector('#player1-gameboard')
     static board2 = document.querySelector('#computer-gameboard')
 
+    static initStartView() {
+        UI.drawStartView([this.board1, this.board2])
+    }
+
     static initGame() {
         this.player1.gameBoard.setFields()
         this.player2.gameBoard.setFields()
 
         //generate ships manually 
-        this.player1.gameBoard.addShipHorizontal('tiny', 2, 5)
-        this.player1.gameBoard.addShipHorizontal('small', 3, 71)
-        this.player1.gameBoard.addShipHorizontal('medium', 4, 32)
-        this.player1.gameBoard.addShipVertical('big', 5, 48)
+        this.player1.gameBoard.addShipRandomly('tiny', 2)
+        this.player1.gameBoard.addShipRandomly('small', 3)
+        this.player1.gameBoard.addShipRandomly('medium', 4)
+        this.player1.gameBoard.addShipRandomly('big', 5)
     
-        this.player2.gameBoard.addShipRandomly('tiny', 2, 5)
-        this.player2.gameBoard.addShipRandomly('small', 3, 71)
-        this.player2.gameBoard.addShipRandomly('medium', 4, 32)
-        this.player2.gameBoard.addShipRandomly('big', 5, 48)
+        this.player2.gameBoard.addShipRandomly('tiny', 2)
+        this.player2.gameBoard.addShipRandomly('small', 3)
+        this.player2.gameBoard.addShipRandomly('medium', 4)
+        this.player2.gameBoard.addShipRandomly('big', 5)
+
+        this.renderView()
     }
 
 
@@ -54,11 +60,6 @@ export class Controller {
             UI.endGame(this.player2)
             return
         }
-    }
-
-    static switchAcivePlayer() {
-        this.activePlayer === this.player1 ? this.activePlayer = 
-        this.player2 : this.activePlayer = this.player1 
     }
 
 }

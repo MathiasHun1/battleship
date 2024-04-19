@@ -19,6 +19,16 @@ class UI {
         })
     }
 
+    static drawStartView(boards) {
+        boards.forEach((board) => {
+            for (let i = 0; i < 100; i++) {
+                let field = document.createElement('div')
+                field.classList.add('field')
+                board.appendChild(field)
+            }
+        })
+    }
+
     static createPlayerFieldView (player, id) {
         const field = document.createElement('div')
         const hasShip = player.gameBoard.ships.find((ship) => ship.fieldIds.includes(id))
